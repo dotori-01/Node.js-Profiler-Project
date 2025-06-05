@@ -19,17 +19,27 @@ DB 통합: MySQL + Redis 캐싱 계층
                     ↙       ↘
                [MySQL]     [Redis]
 # 데이터 처리 파이프라인
-파일 업로드
+1. 파일 업로드
 Multer 미들웨어를 통한 안전한 파일 수신
 확장자(.txt) 및 MIME 타입(text/plain) 검증
 SHA-256 해시 기반 파일명 암호화
 
-데이터 파싱
-    const readInterface = readline.createInterface({
-      input: fs.createReadStream(filePath),
-      crlfDelay: Infinity
-    });
-    
-    readInterface.on('line', processLine);
+2. 데이터 파싱
+       const readInterface = readline.createInterface({
+        input: fs.createReadStream(filePath),
+        crlfDelay: Infinity
+      });
+ 
+      readInterface.on('line', processLine);
+3. 통계 계산
+기본 메트릭: Math.min(), Math.max(), Array.reduce()
+확장 메트릭: Welford 알고리즘 기반 표준편차
 
+4. 데이터 저장
+MySQL: 정규화된 테이블 구조
+Redis: 실시간 캐싱(5분 TTL)
+
+5. 시각화 처리
+WebSocket을 통한 실시간 데이터 전송
+Chart.js 커스텀 플러그인 구현
 
